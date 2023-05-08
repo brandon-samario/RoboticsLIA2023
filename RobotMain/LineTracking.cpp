@@ -72,4 +72,3 @@ void LineTracking::stop() {
   analogWrite(6, 0);
   Serial.println("stop!");
 }
-
