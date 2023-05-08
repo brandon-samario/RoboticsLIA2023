@@ -53,4 +53,3 @@ void RobotCar::stop() {
   analogWrite(_pinB1, 0);
   analogWrite(_pinB2, 0);
 }
-
