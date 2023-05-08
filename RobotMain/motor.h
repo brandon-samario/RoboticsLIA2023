@@ -8,7 +8,6 @@
 class Motor {
   private:
     int motorPin1, motorPin2, speedPin1, speedPin2;
-
   public:
     Motor(int motor1, int motor2, int speed1, int speed2);
     void forward();
