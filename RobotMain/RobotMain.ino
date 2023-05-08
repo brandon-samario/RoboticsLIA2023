@@ -1,10 +1,10 @@
-#include <Servo.h>
 #include <Arduino.h>
+#include <IRremote.h>
+#include <Servo.h>
 #include "Ultrasonic.h"
 #include "motor.h"
 #include "LineTracking.h"
 #include "robot_car.h"
-#include <IRremote.h>
 
 #define F 16736925  //FORWARD (PRESS)
 #define B 16754775  //BACK (PRESS)
