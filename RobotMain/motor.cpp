@@ -1,6 +1,5 @@
 
 
-
 #include "motor.h"
 
 Motor::Motor(int motor1, int motor2, int speed1, int speed2) {
