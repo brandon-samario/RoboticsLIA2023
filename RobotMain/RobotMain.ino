@@ -59,7 +59,6 @@ void setup() {
   // IR receiver setup
   car.init();
   irrecv.enableIRIn();
-
 }
 
 void loop() {
@@ -117,7 +116,6 @@ void loop() {
   if (irrecv.decode(&results)) {
     preMillis = millis();
     irrecv.resume(); // Receive the next value
-
     switch (results.value) {
       case F:
       case UNKNOWN_F: car.forward(); break;
