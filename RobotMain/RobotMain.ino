@@ -25,6 +25,7 @@ const int motorPin1 = 7; // pin 7 connected to motor 1
 const int motorPin2 = 8; // pin 8 connected to motor 2
 const int speedPin1 = 5; // pin 5 connected to motor 1
 const int speedPin2 = 6; // pin 6 connected to motor 2
+
 unsigned long preMillis;
 
 int rightDist = 0, middleDist = 0, leftDist = 0;
