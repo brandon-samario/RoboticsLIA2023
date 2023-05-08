@@ -19,8 +19,7 @@ class RobotCar{
     void backward();
     void left();
     void right();
-    void stop();
-    
+    void stop();   
 };
 
 #endif
