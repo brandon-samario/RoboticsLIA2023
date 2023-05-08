@@ -3,7 +3,6 @@
 #include "robot_car.h"
 
 RobotCar::RobotCar(int pinA1, int pinA2, int pinB1, int pinB2, int standby) {
-
   _pinA1 = pinA1;
   _pinA2 = pinA2;
   _pinB1 = pinB1;
