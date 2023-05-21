@@ -5,6 +5,7 @@
 #include "Ultrasonic.h"
 #include "motor.h"
 #include "LineTracking.h"
+#include "robot_car.h"
 
 #define F 16736925  //FORWARD (PRESS)
 #define B 16754775  //BACK (PRESS)
