@@ -30,113 +30,109 @@ unsigned long preMillis;
 
 int rightDist = 0, middleDist = 0, leftDist = 0;
 
-Servo myservo;
-Ultrasonic ultrasonic(trigPin, echoPin);
-Motor motor1(motorPin1, motorPin2, speedPin1, speedPin2);
-Motor motor2(motorPin2, motorPin1, speedPin2, speedPin1);
+Servo myservo; // Create an instance of the Servo class for controlling a servo motor
+Ultrasonic ultrasonic(trigPin, echoPin); // Create an instance of the Ultrasonic class for the HC-SR04 sensor
+Motor motor1(motorPin1, motorPin2, speedPin1, speedPin2); // Create an instance of the Motor class for motor 1
+Motor motor2(motorPin2, motorPin1, speedPin2, speedPin1); // Create an instance of the Motor class for motor 2
 
-LineTracking robot;
-IRrecv irrecv (9);
-decode_results results;
-RobotCar car(7, 8, 5, 6, 3); // Initialize the RobotCar object
+LineTracking robot; // Create an instance of the LineTracking class
+IRrecv irrecv (9); // Create an instance of the IRrecv class for receiving IR signals
+decode_results results; // Create a variable to store the decoded IR signal
+RobotCar car(7, 8, 5, 6, 3); // Create an instance of the RobotCar class with specified pins
 
 void setup() {
-  pinMode(3, OUTPUT);
-  digitalWrite(3, HIGH);
-  Serial.begin(9600);
+  pinMode(3, OUTPUT); // Set pin 3 as output
+  digitalWrite(3, HIGH); // Set pin 3 to high (assuming it controls some external device)
+  Serial.begin(9600); // Initialize the serial communication
 
   // Servo setup
-  myservo.attach(10);
-  myservo.write(70);
+  myservo.attach(10); // Attach the servo to pin 10
+  myservo.write(70); // Set the initial position of the servo
 
   // Motor setup
-  motor1.stop();
-  motor2.stop();
+  motor1.stop(); // Stop motor 1
+  motor2.stop(); // Stop motor 2
 
   // Line tracking setup
-  robot.setup();
+  robot.setup(); // Initialize the line tracking sensors
 
   // IR receiver setup
-  car.init();
-  irrecv.enableIRIn();
+  car.init(); // Initialize the RobotCar object
+  irrecv.enableIRIn(); // Enable IR reception
 }
 
 void loop() {
   // Ultrasonic sensor and motor control
-  myservo.write(70);
-  delay(500);
-  middleDist = ultrasonic.getDistance();
+  myservo.write(70); // Set the servo to the middle position
+  delay(500); // Delay for 500 milliseconds
+  middleDist = ultrasonic.getDistance(); // Get the distance measured by the ultrasonic sensor
 
-  if (middleDist <= 30) {
-    motor1.stop();
-    motor2.stop();
-    delay(500);
+  if (middleDist <= 30) { // If the middle distance is less than or equal to 30
+    motor1.stop(); // Stop motor 1
+    motor2.stop(); // Stop motor 2
+    delay(500); // Delay for 500 milliseconds
 
     // Move servo to the right to check distance
-    myservo.write(-20);
-    delay(1000);
-    rightDist = ultrasonic.getDistance();
+    myservo.write(-20); // Set the servo to a position for checking distance to the right
+    delay(1000); // Delay for 1000 milliseconds
+    rightDist = ultrasonic.getDistance(); // Get the distance measured by the ultrasonic sensor
 
     // Move servo to the middle
-    myservo.write(70);
-    delay(500);
+    myservo.write(70); // Set the servo to the middle position
+    delay(500); // Delay for 500 milliseconds
 
     // Move servo to the left to check distance
-    myservo.write(160);
-    delay(1000);
-    leftDist = ultrasonic.getDistance();
+    myservo.write(160); // Set the servo to a position for checking distance to the left
+    delay(1000); // Delay for 1000 milliseconds
+    leftDist = ultrasonic.getDistance(); // Get the distance measured by the ultrasonic sensor
 
     // Move servo back to the middle
-    myservo.write(70);
-    delay(500);
+    myservo.write(70); // Set the servo to the middle position
+    delay(500); // Delay for 500 milliseconds
 
-    if (rightDist > leftDist) {
-      motor2.right();
-      delay(300);
-    } else if (leftDist > rightDist) {
-      motor1.left();
-      delay(300);
-    } else if ((rightDist <= 30) || (leftDist <= 30)) {
-      motor1.backward();
-      motor2.backward();
-      delay(300);
-    } else {
-      motor1.forward();
-      motor2.forward();
+    if (rightDist > leftDist) { // If the distance to the right is greater than the distance to the left
+      motor2.right(); // Turn motor 2 to the right
+      delay(300); // Delay for 300 milliseconds
+    } else if (leftDist > rightDist) { // If the distance to the left is greater than the distance to the right
+      motor1.left(); // Turn motor 1 to the left
+      delay(300); // Delay for 300 milliseconds
+    } else if ((rightDist <= 30) || (leftDist <= 30)) { // If either the distance to the right or left is less than or equal to 30
+      motor1.backward(); // Move motor 1 backward
+      motor2.backward(); // Move motor 2 backward
+      delay(300); // Delay for 300 milliseconds
+    } else { // If none of the above conditions are met
+      motor1.forward(); // Move motor 1 forward
+      motor2.forward(); // Move motor 2 forward
     }
-  } else {
-    motor1.forward();
-    motor2.forward();
+  } else { // If the middle distance is greater than 30
+    motor1.forward(); // Move motor 1 forward
+    motor2.forward(); // Move motor 2 forward
   }
 
   // Line tracking
-  robot.move();
+  robot.move(); // Move the robot based on the line tracking sensors
 
   // IR remote control
-  if (irrecv.decode(&results)) {
-    preMillis = millis();
+  if (irrecv.decode(&results)) { // If an IR signal is received and successfully decoded
+    preMillis = millis(); // Record the current time
     irrecv.resume(); // Receive the next value
     switch (results.value) {
       case F:
-      case UNKNOWN_F: car.forward(); break;
+      case UNKNOWN_F: car.forward(); break; // If the received signal is forward, move the car forward
       case B:
-      case UNKNOWN_B: car.backward(); break;
+      case UNKNOWN_B: car.backward(); break; // If the received signal is backward, move the car backward
       case L:
-      case UNKNOWN_L: car.left(); break;
+      case UNKNOWN_L: car.left(); break; // If the received signal is left, turn the car left
       case R:
-      case UNKNOWN_R: car.right(); break;
+      case UNKNOWN_R: car.right(); break; // If the received signal is right, turn the car right
       case S:
-      case UNKNOWN_S: car.stop(); break;
+      case UNKNOWN_S: car.stop(); break; // If the received signal is stop, stop the car
       default: break;
     }
-
-  }
-  else {
-    if (millis() - preMillis > 200) {
-      car.stop();
-      preMillis = millis();
+  } else { // If no IR signal is received
+    if (millis() - preMillis > 200) { // If more than 200 milliseconds have passed since the last received signal
+      car.stop(); // Stop the car
+      preMillis = millis(); // Record the current time
     }
-
   }
-
 }
